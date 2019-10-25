@@ -1,4 +1,4 @@
-package sample
+package lint
 
 import (
 	// "fmt"
@@ -38,21 +38,6 @@ func SampleCompare(s1, s2 *Sample) bool {
 		// fmt.Printf("s1 is nil")
 	}
 	return false
-}
-
-func InvalidSlices(slice1 []string, slice2 []int) (bool, int) {
-	if slice1 == nil {
-		return false, 0
-	}
-	if slice2 == nil {
-		return false, 42
-	}
-	slice1[42] = "12" // crash!
-	if slice2 == nil {
-		sliceOfSlice := slice2[:12]
-		_ = sliceOfSlice
-	}
-	return true, 12
 }
 
 func (s *Sample) SetItem(l io.Reader) {

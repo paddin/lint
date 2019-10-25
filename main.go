@@ -89,6 +89,21 @@ func main() {
 	}
 }
 
+func InvalidSlices(slice1 []string, slice2 []int) (bool, int) {
+	if slice1 == nil {
+		return false, 0
+	}
+	if slice2 == nil {
+		return false, 0
+	}
+	slice1[1] = ""
+	if slice2 == nil {
+		sliceOfSlice := slice2[:2]
+		_ = sliceOfSlice
+	}
+	return true, 1
+}
+
 func lintImportedPackage(pkg *build.Package, err error) {
 	if pkg == nil {
 		return

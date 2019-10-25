@@ -89,52 +89,10 @@ func main() {
 	}
 }
 
-func isDir(filename string) bool {
-	fi, err := os.Stat(filename)
-	return err == nil && fi.IsDir()
-}
-
-func exists(filename string) bool {
-	_, err := os.Stat(filename)
-	return err == nil
-}
-
-func lintFiles(filenames ...string) {
-	files := make(map[string][]byte)
-	for _, filename := range filenames {
-		src, err := ioutil.ReadFile(filename)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			continue
-		}
-		files[filename] = src
-	}
-
-	l := new(lint.Linter)
-	ps, err := l.LintFiles(files)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
+func lintImportedPackage(pkg *build.Package, err error) {
+	if pkg == nil {
 		return
 	}
-	for _, p := range ps {
-		if p.Confidence >= *minConfidence {
-			fmt.Printf("%v: %s\n", p.Position, p.Text)
-			suggestions++
-		}
-	}
-}
-
-func lintDir(dirname string) {
-	pkg, err := build.ImportDir(dirname, 0)
-	lintImportedPackage(pkg, err)
-}
-
-func lintPackage(pkgname string) {
-	pkg, err := build.Import(pkgname, ".", 0)
-	lintImportedPackage(pkg, err)
-}
-
-func lintImportedPackage(pkg *build.Package, err error) {
 	if err != nil {
 		if _, nogo := err.(*build.NoGoError); nogo {
 			// Don't complain if the failure is due to no Go source files.
